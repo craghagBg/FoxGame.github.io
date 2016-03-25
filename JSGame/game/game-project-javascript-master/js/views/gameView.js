@@ -20,30 +20,37 @@ var app = app || {};
         });
     };
 
-    GameView.prototype.drawHero = function drawHero(color, subject){
-        app.ctx.fillStyle = color;
-        app.ctx.fillRect(
-            subject.getX(),
-            subject.getY(),
-            subject.getWidth(),
-            subject.getHeight());
+    GameView.prototype.drawHero = function drawHero(subject, color){
+        if (color){
+            app.ctx.fillStyle = color;
+            app.ctx.fillRect(
+                subject.getX(),
+                subject.getY(),
+                subject.getWidth(),
+                subject.getHeight());
+        }else{
+            image(subject.getX(), subject.getY(), 'imgs/singleFox.png');
+        }
     };
 
-    GameView.prototype.drawRock = function drawRock(color, object){
-        app.ctx.fillStyle = color;
-        app.ctx.fillRect(
-            object.getX(),
-            object.getY(),
-            object.getWidth(),
-            object.getHeight());
+    GameView.prototype.drawRock = function drawRock(object){
+        image(object.getX(), object.getY(), 'imgs/smallRock.png');
     };
 
     GameView.prototype.clearAllLevel = function clearAllLevel(){
         app.ctx.clearRect(0, 0, app.canvas.width(), app.canvas.height());
     };
 
-    GameView.prototype.clearHero = function clearHero(color, subject){
-        this.drawHero(color, subject);
+    GameView.prototype.clearHero = function clearHero(subject, color){
+        this.drawHero(subject, color);
+    };
+
+    var image = function(x, y, path){
+        var img = new Image();
+        img.src = path;
+        img.onload = function(){
+            app.ctx.drawImage(img, x, y);
+        };
     };
 
     app.gameView = GameView;

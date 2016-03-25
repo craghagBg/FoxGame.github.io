@@ -5,17 +5,16 @@ var app = app || {};
 
     gameView.generateField();
 
-    var gameObjects = [],
-        hero = new app.hero(50, 50, 10, 10),
-        rock = new app.rock(150, 150, 80, 30),
-        rock2 = new app.rock(250, 250, 50, 130);
-
-    gameObjects.push(rock);
-    gameObjects.push(rock2);
+    var hero = new app.hero(50, 50),
+        gameObjects = [
+        new app.rock(0, 250),
+        new app.rock(150, 150),
+        new app.rock(250, 250)];
 
     var gameController = new app.gameController(gameView, hero, gameObjects);
+
     gameObjects.forEach(function(rock){
-        gameView.drawRock('#000', rock);
+        gameView.drawRock(rock);
     });
 
     document.addEventListener('start', function (){

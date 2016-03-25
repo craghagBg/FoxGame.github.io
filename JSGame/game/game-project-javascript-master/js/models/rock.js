@@ -46,7 +46,7 @@ var maxRockSize = 200;
             throw new Error('Rock is outside of ths field!');
         }
 
-        this._width = width;
+        this._width = width || 81;
     };
 
     Rock.prototype.getWidth = function (){
@@ -58,12 +58,21 @@ var maxRockSize = 200;
             throw new Error('Rock is outside of ths field!');
         }
 
-        this._height = height;
+        this._height = height || 60;
     };
 
     Rock.prototype.getHeight = function (){
         return this._height;
     };
+
+    Rock.prototype.image = function(x, y){
+        var img = new Image();
+        img.src = 'imgs/smallRock.png';
+        img.onload = function(){
+            app.ctx.drawImage(img, x, y);
+        };
+    };
+
     app.rock = Rock;
 
 }(app));

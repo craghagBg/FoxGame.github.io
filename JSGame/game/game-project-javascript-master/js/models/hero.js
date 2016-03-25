@@ -48,7 +48,7 @@ var app = app || {},
             throw new Error('Hero is outside of ths field!');
         }
 
-        this._width = width;
+        this._width = width || 35;
     };
 
     Hero.prototype.getWidth = function (){
@@ -60,7 +60,7 @@ var app = app || {},
             throw new Error('Hero is outside of ths field!');
         }
 
-        this._height = height;
+        this._height = height || 45;
     };
 
     Hero.prototype.getHeight = function (){
@@ -90,5 +90,4 @@ var app = app || {},
     };
 
     app.hero = Hero;
-
 }(app));
