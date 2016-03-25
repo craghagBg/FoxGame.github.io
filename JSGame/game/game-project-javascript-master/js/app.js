@@ -22,12 +22,15 @@ var app = app || {};
         gameController.run();
         document.addEventListener('keydown', function (event){
             var keyCode = event.keyCode;
-            $.each(hero.directions, function(index, value) {
-                if (value === keyCode){
-                    hero.direction = value;
-                }
-            });
-
+            if (keyCode === hero.direction){
+                hero.direction = hero.directions.stop;
+            }else{
+                $.each(hero.directions, function(index, value) {
+                    if (value === keyCode){
+                        hero.direction = value;
+                    }
+                });
+            }
         });
     });
 
