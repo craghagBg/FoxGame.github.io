@@ -1,7 +1,13 @@
 var app = app || {};
 
 (function(app){
-    function GameView(){}
+    function GameView(){
+        this.heroImage = (function (){
+            var img = new Image();
+            img.src = 'imgs/singleFox.png';
+            return img;
+        })();
+    }
 
     GameView.prototype.generateField = function () {
         app.canvas = $('#canvas');
@@ -29,12 +35,14 @@ var app = app || {};
                 subject.getWidth(),
                 subject.getHeight());
         }else{
-            image(subject.getX(), subject.getY(), 'imgs/singleFox.png');
+            this.heroImage.onload = app.ctx.drawImage(this.heroImage, subject.getX(),  subject.getY());
         }
     };
 
     GameView.prototype.drawRock = function drawRock(object){
-        image(object.getX(), object.getY(), 'imgs/smallRock.png');
+        var img = new Image();
+        img.src = 'imgs/smallRock.png';
+        img.onload = function(){app.ctx.drawImage(img, object.getX(), object.getY());};
     };
 
     GameView.prototype.clearAllLevel = function clearAllLevel(){
@@ -43,14 +51,6 @@ var app = app || {};
 
     GameView.prototype.clearHero = function clearHero(subject, color){
         this.drawHero(subject, color);
-    };
-
-    var image = function(x, y, path){
-        var img = new Image();
-        img.src = path;
-        img.onload = function(){
-            app.ctx.drawImage(img, x, y);
-        };
     };
 
     app.gameView = GameView;

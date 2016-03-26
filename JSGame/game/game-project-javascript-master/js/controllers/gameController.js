@@ -26,6 +26,30 @@ var app = app || {};
         }, 10);
     };
 
+    GameController.prototype.run2 = function(){
+        var _this = this;
+        function repeatOften() {
+            _this.heroView.clearHero(_this.model, '#333');
+            var lastHero = new app.hero(
+                _this.model.getX(),
+                _this.model.getY(),
+                _this.model.getWidth(),
+                _this.model.getHeight());
+
+            _this.model.move();
+            _this.gameObjects.forEach(function(gameObject){
+                _this.model.collision(gameObject, lastHero);
+            });
+            _this.heroView.drawHero(_this.model);
+
+            app.raf = requestAnimationFrame(repeatOften);
+        }
+
+        app.raf = requestAnimationFrame(repeatOften);
+
+    };
+
+
     GameController.prototype.stopGame = function(){
         this.heroView.clearAllLevel();
         clearInterval(this.interval);
