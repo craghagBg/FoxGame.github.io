@@ -2,13 +2,16 @@ var app = app || {},
     maxHeroSize = 50;
 
 (function(app){
-    function Hero(x, y, width, height){
+    function Hero(x, y,image, width, height){
         this.setX(x);
         this.setY(y);
         this.setWidth(width);
         this.setHeight(height);
+        this.image = new Image();
+        this.image.src = image;
         this.directions = {'up': 38, 'right': 39, 'down': 40, 'left': 37, stop: 0};
         this.direction = this.directions.right;
+        this.lastHeroDirection = 0;
     }
 
     Hero.prototype.setX = function (x){
@@ -87,6 +90,39 @@ var app = app || {},
                 document.dispatchEvent(collisionHero);
             }
         }
+    };
+
+    Hero.prototype.drawHero = function drawHero(counter){
+        var imageDirection;
+        switch (this.direction){
+            case 37 : imageDirection = 1; break;
+            case 38 : imageDirection = 3; break;
+            case 39 : imageDirection = 2; break;
+            case 40 : imageDirection = 0; break;
+            case 0 : imageDirection = this.lastHeroDirection; break;
+        }
+
+        this.lastHeroDirection = imageDirection;
+        this.image.onload = app.ctx.drawImage(
+            this.image,
+            Math.floor(counter / 10) * 48,
+            imageDirection * 48,
+            48,
+            48,
+            this._x,
+            this._y,
+            48,
+            48
+        );
+    };
+
+    Hero.prototype.clearHero = function clearHero(){
+        app.ctx.fillStyle = '#333';
+        app.ctx.fillRect(
+            this._x,
+            this._y,
+            this._width,
+            this._height);
     };
 
     app.hero = Hero;

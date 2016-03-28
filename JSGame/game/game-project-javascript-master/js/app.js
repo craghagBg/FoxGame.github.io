@@ -1,48 +1,51 @@
 var app = app || {};
+app.isStarted = false;
 
 (function(app){
-    var gameView = new app.gameView();
-
-    gameView.generateField();
-
-    var hero = new app.hero(50, 50),
-        gameObjects = [
-        new app.rock(0, 250),
-        new app.rock(150, 150),
-        new app.rock(350, 250)];
-
-    var gameController = new app.gameController(gameView, hero, gameObjects);
-
-    gameObjects.forEach(function(rock){
-        gameView.drawRock(rock);
+    $.get('templates/story.html', function(template){
+        $('#container').html(template);
     });
 
     document.addEventListener('start', function (){
-        gameController.run();
-        document.addEventListener('keydown', function (event){
-            var keyCode = event.keyCode;
-            if (keyCode === hero.direction){
-                hero.direction = hero.directions.stop;
-            }else{
-                $.each(hero.directions, function(index, value) {
-                    if (value === keyCode){
-                        hero.direction = value;
-                    }
-                });
-            }
-        });
+        if (!app.isStarted){
+            $.get('templates/game.html', function(template){
+                $('#container').html(template);
+                app.canvas = $('#canvas');
+                app.ctx = canvas.getContext("2d");
+                var gameApp = new app.gameApp();
+                gameApp.game();
+            });
+        }
+        app.isStarted = true;
     });
 
     document.addEventListener('stop', function (){
-        gameController.stopGame();
+        $.get('templates/gameOver.html', function(template){
+            $('#container').html(template);
+        });
     });
 
-    document.addEventListener('collisionHero', function (e){
-        var lastHero = e.detail;
-        hero.setX(lastHero.getX());
-        hero.setY(lastHero.getY());
-        hero.setWidth(lastHero.getWidth());
-        hero.setHeight(lastHero.getHeight());
-        hero.direction = hero.directions.stop;
+    document.addEventListener('story', function (){
+        $.get('templates/story.html', function(template){
+            $('#container').html(template);
+        });
+    });
+
+    $('#start').on('click', function(){
+        var start = document.createEvent('Event');
+        start.initEvent('start', true, true);
+        document.dispatchEvent(start);
+    });
+
+    $('#stop').on('click', function(){
+        var stop = document.createEvent('Event');
+        stop.initEvent('stop', true, true);
+        document.dispatchEvent(stop);
+    });
+
+    $('#story').on('click', function(){
+        var story = document.createEvent('Event');
+        story.initEvent('story', true, true);
+        document.dispatchEvent(story);
     });
 }(app));

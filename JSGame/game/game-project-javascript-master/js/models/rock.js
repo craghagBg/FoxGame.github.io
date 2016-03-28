@@ -2,9 +2,11 @@ var app = app || {};
 var maxRockSize = 200;
 
 (function(app){
-    function Rock(x, y, width, height){
+    function Rock(x, y, image, width, height){
         this.setX(x);
         this.setY(y);
+        this.image = new Image();
+        this.image.src = image;
         this.setWidth(width);
         this.setHeight(height);
     }
@@ -70,6 +72,13 @@ var maxRockSize = 200;
         img.src = 'imgs/smallRock.png';
         img.onload = function(){
             app.ctx.drawImage(img, x, y);
+        };
+    };
+
+    Rock.prototype.drawRock = function drawRock(){
+        var _this = this;
+        this.image.onload = function(){
+            app.ctx.drawImage(_this.image, _this._x, _this._y);
         };
     };
 

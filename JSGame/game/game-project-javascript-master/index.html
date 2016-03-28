@@ -3,23 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <title>Game</title>
+    <link rel="stylesheet" href="styles/style.css">
 	<script src="js/libs/jquery.min.js"></script>
     <script src="js/libs/q.js"></script>
 </head>
 <body>
-	<div id="wrapper", style='text-align: center'>
-        <h2>Controls</h2>
-        <button id="start", type="button">Start Game</button>
-        <button id="stop", type="button">Stop Game</button>
-        <h2></h2>
-        <canvas id="canvas" width="600" height="400"
-                style="background-color:#333"></canvas>
-
+	<div id="wrapper">
+        <h1>Хитрана</h1>
+        <button id="story" type="button">Story</button>
+        <button id="start" type="button">Start Game</button>
+        <button id="stop" type="button">Stop Game</button>
+        <div id="container"></div>
         <script src="js/views/gameView.js"></script>
 		<script src="js/models/hero.js"></script>
         <script src="js/models/rock.js"></script>
         <script src="js/controllers/gameController.js"></script>
-		<script src="js/app.js"></script>
+        <script src="js/gameApp.js"></script>
+        <script src="js/app.js"></script>
 	</div>
 </body>
 </html>

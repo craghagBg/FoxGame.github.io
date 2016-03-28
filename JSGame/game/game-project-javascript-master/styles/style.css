@@ -1,0 +1,12 @@
+#wrapper {
+    text-align: center;
+}
+
+pre {
+    font-size: 1.5em;
+    text-align: justify;
+}
+
+canvas {
+    margin: 50px;
+}
