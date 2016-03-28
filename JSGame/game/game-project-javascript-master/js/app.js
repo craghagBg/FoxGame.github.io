@@ -9,7 +9,7 @@ var app = app || {};
         gameObjects = [
         new app.rock(0, 250),
         new app.rock(150, 150),
-        new app.rock(250, 250)];
+        new app.rock(350, 250)];
 
     var gameController = new app.gameController(gameView, hero, gameObjects);
 
