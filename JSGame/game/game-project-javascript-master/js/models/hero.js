@@ -63,7 +63,7 @@ var app = app || {},
             throw new Error('Hero is outside of ths field!');
         }
 
-        this._height = height || 48;
+        this._height = height || 40;
     };
 
     Hero.prototype.getHeight = function (){
@@ -85,8 +85,9 @@ var app = app || {},
             this._x <= obj.getX() + obj.getWidth() + 1){
             if (this._y + this._height >= obj.getY() - 1 &&
                 this._y <= obj.getY() + obj.getHeight() + 1){
+                var data = [obj, lastHero];
                 var collisionHero = document.createEvent('CustomEvent');
-                collisionHero.initCustomEvent('collisionHero', true, true, lastHero);
+                collisionHero.initCustomEvent('collisionHero', true, true, data);
                 document.dispatchEvent(collisionHero);
             }
         }
@@ -105,14 +106,14 @@ var app = app || {},
         this.lastHeroDirection = imageDirection;
         this.image.onload = app.ctx.drawImage(
             this.image,
-            Math.floor(counter / 10) * 48,
-            imageDirection * 48,
-            48,
-            48,
+            Math.floor(counter / 10) * this._width,
+            imageDirection * this._height,
+            this._width,
+            this._height,
             this._x,
             this._y,
-            48,
-            48
+            this._width,
+            this._height
         );
     };
 
@@ -125,5 +126,7 @@ var app = app || {},
             this._height);
     };
 
-    app.hero = Hero;
+    app.hero = function(x, y,image, width, height){
+        return new Hero(x, y,image, width, height);
+    };
 }(app));

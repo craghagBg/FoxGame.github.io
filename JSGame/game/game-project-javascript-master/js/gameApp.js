@@ -2,44 +2,65 @@ var app = app || {};
 
 (function(app){
     function GameApp(){
-        this.gameView = new app.gameView();
+        app.points = 0;
+        this.fox = app.hero(100, 100, 'imgs/foxes2.png');
+        this.gameObjects = [
+            app.obstacle(0, 10, 'imgs/tree.png'),
+            app.obstacle(0, 106, 'imgs/tree.png'),
+            app.obstacle(0, 202, 'imgs/tree.png'),
+            app.obstacle(0, 296, 'imgs/tree.png'),
+            app.obstacle(300, 10, 'imgs/tree.png'),
+            app.obstacle(300, 106, 'imgs/tree.png'),
+            app.obstacle(300, 296, 'imgs/tree.png'),
+            app.obstacle(540, 296, 'imgs/tree3.png'),
+            app.obstacle(540, 10, 'imgs/tree3.png'),
+            app.obstacle(540, 106, 'imgs/tree3.png'),
+            app.obstacle(540, 202, 'imgs/tree3.png'),
+            app.obstacle(540, 296, 'imgs/tree3.png'),
+            app.obstacle(0, 296, 'imgs/tree.png'),
+            app.food(200, 296, 'imgs/grape.png'),
+            app.food(100, 296, 'imgs/grape.png'),
+            app.food(400, 96, 'imgs/grape.png'),
+            app.food(360, 350, 'imgs/grape.png')];
     }
 
     GameApp.prototype.game = function (){
-        var hero = new app.hero(50, 50, 'imgs/foxes.png'),
-            gameObjects = [
-                new app.rock(0, 250, 'imgs/smallRock.png'),
-                new app.rock(150, 150, 'imgs/smallRock.png'),
-                new app.rock(350, 250, 'imgs/smallRock.png')];
-
-        var gameController = new app.gameController(this.gameView, hero, gameObjects);
-
-        gameObjects.forEach(function(rock){
-            rock.drawRock(rock);
-        });
+        var gameController = app.gameController(this.fox, this.gameObjects),
+            _this = this;
 
         gameController.run();
 
         document.addEventListener('keydown', function (event){
             var keyCode = event.keyCode;
-            if (keyCode === hero.direction){
-                hero.direction = hero.directions.stop;
+            if (keyCode === _this.fox.direction){
+                _this.fox.direction = _this.fox.directions.stop;
             }else{
-                $.each(hero.directions, function(index, value) {
+                $.each(_this.fox.directions, function(index, value) {
                     if (value === keyCode){
-                        hero.direction = value;
+                        _this.fox.direction = value;
                     }
                 });
             }
         });
 
         document.addEventListener('collisionHero', function (e){
-            var lastHero = e.detail;
-            hero.setX(lastHero[0]);
-            hero.setY(lastHero[1]);
-            hero.direction = hero.directions.stop;
+            var gameObject = e.detail[0],
+                lastHero = e.detail[1];
+
+            if (gameObject instanceof app._Food){
+                gameObject.clear();
+                gameObject.isLive = false;
+                app.points++;
+                console.log(app.points);
+            }else{
+                _this.fox.setX(lastHero[0]);
+                _this.fox.setY(lastHero[1]);
+                _this.fox.direction = _this.fox.directions.stop;
+            }
         });
     };
 
-    app.gameApp = GameApp;
+    app.gameApp = function(){
+        return new GameApp();
+    };
 }(app));

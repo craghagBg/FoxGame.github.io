@@ -1,8 +1,7 @@
 var app = app || {};
 
 (function(app){
-    function GameController(view, model, gameObjects){
-        this.gameView = view;
+    function GameController(model, gameObjects){
         this.model = model;
         this.gameObjects = gameObjects;
         this.isStop = false;
@@ -19,6 +18,10 @@ var app = app || {};
                 _this.model.collision(gameObject, lastHeroPosition);
             });
 
+            _this.gameObjects = _this.gameObjects.filter(function(gameObject){
+                return gameObject.isLive;
+            });
+
             if (_this.isStop){ return; }
 
             animationCounter++;
@@ -32,5 +35,7 @@ var app = app || {};
         app.raf = requestAnimationFrame(repeatOften);
     };
 
-    app.gameController = GameController;
+    app.gameController = function(model, gameObjects){
+        return new GameController(model, gameObjects);
+    };
 }(app));

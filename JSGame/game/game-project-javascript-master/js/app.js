@@ -12,9 +12,11 @@ app.isStarted = false;
                 $('#container').html(template);
                 app.canvas = $('#canvas');
                 app.ctx = canvas.getContext("2d");
-                var gameApp = new app.gameApp();
+                var gameApp = app.gameApp();
                 gameApp.game();
             });
+        }else{
+            location.reload();
         }
         app.isStarted = true;
     });
