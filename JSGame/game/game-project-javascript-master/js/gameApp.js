@@ -3,8 +3,9 @@ var app = app || {};
 (function(app){
     function GameApp(){
         app.points = 0;
-        this.fox = app.level.hero;
-        this.gameObjects = app.level.objects;
+        this.level = app.level();
+        this.fox = this.level.hero;
+        this.gameObjects = this.level.objects;
     }
 
     GameApp.prototype.game = function (){

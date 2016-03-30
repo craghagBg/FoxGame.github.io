@@ -81,10 +81,10 @@ var app = app || {},
     };
 
     Hero.prototype.collision = function collision(obj, lastHero) {
-        if (this._x + this._width >= obj.getX() - 1 &&
-            this._x <= obj.getX() + obj.getWidth() + 1){
-            if (this._y + this._height >= obj.getY() - 1 &&
-                this._y <= obj.getY() + obj.getHeight() + 1){
+        if (this._x + this._width / 2 >= obj.getX() &&
+            this._x <= obj.getX() + obj.getWidth() / 2){
+            if (this._y + this._height / 2 >= obj.getY() &&
+                this._y <= obj.getY() + obj.getHeight() / 2){
                 var data = [obj, lastHero];
                 var collisionHero = document.createEvent('CustomEvent');
                 collisionHero.initCustomEvent('collisionHero', true, true, data);

@@ -16,6 +16,7 @@ var app = app || {};
             _this.model.move();
             _this.gameObjects.forEach(function(gameObject){
                 _this.model.collision(gameObject, lastHeroPosition);
+                gameObject.draw();
             });
 
             _this.gameObjects = _this.gameObjects.filter(function(gameObject){

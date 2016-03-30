@@ -73,6 +73,10 @@ var maxRockSize = 200;
             this._height);
     };
 
+    Obstacle.prototype.draw = function draw(){
+        app.ctx.drawImage(this.image, this._x, this._y);
+    };
+
     app._Obstacle = Obstacle;
 
     app.obstacle = function(x, y, image){ return new Obstacle(x, y, image); }
