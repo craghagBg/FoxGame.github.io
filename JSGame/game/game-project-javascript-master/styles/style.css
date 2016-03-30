@@ -5,9 +5,14 @@
     width: 70%;
 }
 
+#container {
+    text-align: center;
+}
+
 p {
     font-size: 1.5em;
     text-align: justify;
+
 }
 
 canvas {
