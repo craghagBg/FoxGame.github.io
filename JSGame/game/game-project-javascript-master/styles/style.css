@@ -1,8 +1,11 @@
 #wrapper {
+    margin-left: auto;
+    margin-right: auto;
     text-align: center;
+    width: 70%;
 }
 
-pre {
+p {
     font-size: 1.5em;
     text-align: justify;
 }
