@@ -5,41 +5,49 @@ var app = app || {};
         app.points = 0;
         this.level = app.level();
         this.fox = this.level.hero;
-        this.gameObjects = this.level.objects;
+        this.enemies = this.level.enemies;
+        this.objects = this.level.objects;
     }
 
     GameApp.prototype.game = function (){
-        var gameController = app.gameController(this.fox, this.gameObjects),
+        var gameController = app.gameController(this.fox, this.enemies, this.objects),
             _this = this;
 
         gameController.run();
 
         document.addEventListener('keydown', function (event){
             var keyCode = event.keyCode;
-            if (keyCode === _this.fox.direction){
-                _this.fox.direction = _this.fox.directions.stop;
-            }else{
-                $.each(_this.fox.directions, function(index, value) {
-                    if (value === keyCode){
-                        _this.fox.direction = value;
-                    }
-                });
-            }
+            $.each(app.directions, function(index, value) {
+                if (value === keyCode){
+                    _this.fox.direction = value;
+                }
+            });
         });
 
-        document.addEventListener('collisionHero', function (e){
-            var gameObject = e.detail[0],
-                lastHero = e.detail[1];
+        document.addEventListener('collisionSubject-Subject', function (){
+            gameController.isStop = true;
+        });
 
-            if (gameObject instanceof app._Food){
-                gameObject.clear();
-                gameObject.isLive = false;
-                app.points++;
-                console.log(app.points);
+        document.addEventListener('collisionSubject-Object', function (e){
+            var object = e.detail[0],
+                subject = e.detail[1];
+
+            if (!(subject instanceof app._Enemy)){
+                if (object instanceof app._Food){
+                    object.clear();
+                    object.isLive = false;
+                    app.points++;
+                }else{
+                    subject.setX(subject.lastPosition[0]);
+                    subject.setY(subject.lastPosition[1]);
+                    subject.direction = app.directions.stop;
+                }
             }else{
-                _this.fox.setX(lastHero[0]);
-                _this.fox.setY(lastHero[1]);
-                _this.fox.direction = _this.fox.directions.stop;
+                if (!(object instanceof app._Food)){
+                    subject.setX(subject.lastPosition[0]);
+                    subject.setY(subject.lastPosition[1]);
+                    subject.direction = 37 + getRandomInt(0, 4);
+                }
             }
         });
     };

@@ -5,15 +5,11 @@ var maxRockSize = 200;
     function Obstacle(x, y, image){
         this.setX(x);
         this.setY(y);
-        this.image = new Image();
-        this.image.src = image;
+        this.image = image;
         this.isLive = true;
-        var _this = this;
-        this.image.onload = function(){
-            _this.setWidth(_this.image.width);
-            _this.setHeight(_this.image.height);
-            app.ctx.drawImage(_this.image, _this._x, _this._y);
-        };
+        this.setWidth(this.image.width);
+        this.setHeight(this.image.height);
+        this.draw();
     }
 
     Obstacle.prototype.setX = function (x){

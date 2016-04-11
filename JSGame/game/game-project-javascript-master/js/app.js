@@ -12,7 +12,7 @@ app.isStarted = false;
                 $('#container').html(template);
                 app.canvas = $('#canvas');
                 app.ctx = canvas.getContext("2d");
-                var gameApp = app.gameApp();
+                var gameApp = app.gameApp(app.level());
                 gameApp.game();
             });
         }else{
@@ -50,4 +50,10 @@ app.isStarted = false;
         story.initEvent('story', true, true);
         document.dispatchEvent(story);
     });
+
+    window.addEventListener("keydown", function(e) {
+        if([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
+            e.preventDefault();
+        }
+    }, false);
 }(app));

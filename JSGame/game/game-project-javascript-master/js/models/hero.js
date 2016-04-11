@@ -1,17 +1,19 @@
 var app = app || {},
-    maxHeroSize = 50;
+    maxHeroSize = 200;
 
 (function(app){
     function Hero(x, y,image, width, height){
         this.setX(x);
         this.setY(y);
+        this.defaultWidth = 48;
+        this.defaultHeight = 40;
         this.setWidth(width);
         this.setHeight(height);
-        this.image = new Image();
-        this.image.src = image;
-        this.directions = {'up': 38, 'right': 39, 'down': 40, 'left': 37, stop: 0};
-        this.direction = this.directions.right;
+        this.image = image;
+        this.direction = app.directions.right;
         this.lastHeroDirection = 0;
+        this.animationCounter = 0;
+        this.isMove = true;
     }
 
     Hero.prototype.setX = function (x){
@@ -51,7 +53,7 @@ var app = app || {},
             throw new Error('Hero is outside of ths field!');
         }
 
-        this._width = width || 48;
+        this._width = width || this.defaultWidth;
     };
 
     Hero.prototype.getWidth = function (){
@@ -63,7 +65,7 @@ var app = app || {},
             throw new Error('Hero is outside of ths field!');
         }
 
-        this._height = height || 40;
+        this._height = height || this.defaultHeight;
     };
 
     Hero.prototype.getHeight = function (){
@@ -72,42 +74,45 @@ var app = app || {},
 
     Hero.prototype.move = function() {
         switch (this.direction){
-            case this.directions.up: this.setY(this._y - 1); break;
-            case this.directions.right: this.setX(this._x + 1); break;
-            case this.directions.down: this.setY(this._y + 1); break;
-            case this.directions.left: this.setX(this._x - 1); break;
-            case this.directions.stop: break;
+            case app.directions.up: this.setY(this._y - 1); break;
+            case app.directions.right: this.setX(this._x + 1); break;
+            case app.directions.down: this.setY(this._y + 1); break;
+            case app.directions.left: this.setX(this._x - 1); break;
+            case app.directions.stop: break;
         }
     };
 
-    Hero.prototype.collision = function collision(obj, lastHero) {
-        if (this._x + this._width / 2 >= obj.getX() &&
+    Hero.prototype.collisionWithObject = function collision(obj) {
+        if (this._x + this._width * 2 / 3 >= obj.getX() &&
             this._x <= obj.getX() + obj.getWidth() / 2){
-            if (this._y + this._height / 2 >= obj.getY() &&
+            if (this._y + this._height * 2 / 3 >= obj.getY() &&
                 this._y <= obj.getY() + obj.getHeight() / 2){
-                var data = [obj, lastHero];
+                var data = [obj, this];
                 var collisionHero = document.createEvent('CustomEvent');
-                collisionHero.initCustomEvent('collisionHero', true, true, data);
+                collisionHero.initCustomEvent('collisionSubject-Object', true, true, data);
                 document.dispatchEvent(collisionHero);
             }
         }
     };
 
-    Hero.prototype.drawHero = function drawHero(counter){
-        var imageDirection;
+    Hero.prototype.draw = function draw(){
+        var imagePositionY;
         switch (this.direction){
-            case 37 : imageDirection = 1; break;
-            case 38 : imageDirection = 3; break;
-            case 39 : imageDirection = 2; break;
-            case 40 : imageDirection = 0; break;
-            case 0 : imageDirection = this.lastHeroDirection; break;
+            case app.directions.left : imagePositionY = 1; break;
+            case app.directions.up : imagePositionY = 3; break;
+            case app.directions.right : imagePositionY = 2; break;
+            case app.directions.down : imagePositionY = 0; break;
+            case app.directions.stop : imagePositionY = this.lastHeroDirection; break;
         }
 
-        this.lastHeroDirection = imageDirection;
-        this.image.onload = app.ctx.drawImage(
+        this.animationCounter++;
+        if (this.animationCounter === 30){ this.animationCounter = 0; }
+
+        this.lastHeroDirection = imagePositionY;
+        app.ctx.drawImage(
             this.image,
-            Math.floor(counter / 10) * this._width,
-            imageDirection * this._height,
+            Math.floor(this.animationCounter / 10) * this._width,
+            imagePositionY * this._height,
             this._width,
             this._height,
             this._x,
@@ -117,7 +122,7 @@ var app = app || {},
         );
     };
 
-    Hero.prototype.clearHero = function clearHero(){
+    Hero.prototype.clear = function clear(){
         app.ctx.fillStyle = '#333';
         app.ctx.fillRect(
             this._x,
@@ -125,6 +130,8 @@ var app = app || {},
             this._width,
             this._height);
     };
+
+    app._Hero = Hero;
 
     app.hero = function(x, y,image, width, height){
         return new Hero(x, y,image, width, height);
